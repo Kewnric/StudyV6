@@ -1,0 +1,2304 @@
+/* ============================================================
+   VISUALIZATION.CSS — Mindmap Canvas, Nodes, Links, Menus
+   ============================================================ */
+
+/* --- Top Navigation Bar --- */
+.viz-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.625rem 1rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  z-index: 50;
+  gap: 0.75rem;
+}
+
+.viz-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.viz-topbar-left h1 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.viz-topbar-left h1 i,
+.viz-topbar-left h1 svg {
+  color: var(--color-primary);
+  width: 22px;
+  height: 22px;
+}
+
+.viz-module-tabs {
+  display: flex;
+  gap: 0.25rem;
+  background: var(--bg-surface-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.2rem;
+}
+
+.viz-module-tab {
+  padding: 0.4rem 1rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  border: none;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  white-space: nowrap;
+}
+
+.viz-module-tab i,
+.viz-module-tab svg {
+  width: 14px;
+  height: 14px;
+}
+
+.viz-module-tab:hover {
+  color: var(--text-primary);
+  background: rgba(148, 163, 184, 0.1);
+}
+
+.viz-module-tab.active {
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+  box-shadow: 0 2px 8px var(--color-primary-glow);
+}
+
+.viz-topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viz-topbar-actions .btn {
+  font-size: 0.8125rem;
+}
+
+/* --- Split Workspace --- */
+.viz-workspace {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  padding: 0.75rem;
+  gap: 0.75rem;
+}
+
+/* --- Content List Pane (Left) --- */
+.viz-content-pane {
+  width: 320px;
+  min-width: 240px;
+  /* No max-width — the JS resizer needs free range like messenger-pane-1.
+     A buffer is enforced in initResizerDrag (200px reserved for the next sibling). */
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+  transition: width 0.3s ease;
+  z-index: 20;
+}
+
+.viz-content-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.viz-content-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viz-content-title i,
+.viz-content-title svg {
+  width: 14px;
+  height: 14px;
+}
+
+.viz-content-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  color: var(--text-tertiary);
+  flex-wrap: wrap;
+}
+
+.viz-breadcrumb-item {
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-weight: 600;
+  background: none;
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.viz-breadcrumb-item:hover {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.viz-breadcrumb-sep {
+  font-size: 0.625rem;
+  color: var(--text-tertiary);
+}
+
+.viz-content-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+/* Content list items */
+.viz-list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.viz-list-item[draggable="true"] {
+  cursor: grab;
+}
+
+.viz-list-item[draggable="true"]:active {
+  cursor: grabbing;
+}
+
+.viz-list-item i,
+.viz-list-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.viz-list-item .viz-item-icon-folder {
+  color: var(--color-accent);
+}
+
+.viz-list-item .viz-item-icon-item {
+  color: var(--text-tertiary);
+}
+
+.viz-folder-chevron {
+  color: var(--text-tertiary);
+  width: 12px !important;
+  height: 12px !important;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.viz-folder-row {
+  cursor: pointer;
+}
+
+.viz-list-item:hover {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: var(--border-color-subtle);
+}
+
+.viz-list-item.active {
+  background: radial-gradient(circle at left, rgba(34, 211, 238, 0.15) 0%, transparent 80%), var(--bg-surface-hover);
+  border-color: transparent;
+}
+
+.viz-list-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background: #22d3ee;
+  box-shadow: 2px 0 8px #22d3ee;
+  border-radius: 0 4px 4px 0;
+}
+
+.viz-item-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-item-badge {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.viz-content-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  color: var(--text-tertiary);
+  text-align: center;
+  padding: 2rem;
+  gap: 0.5rem;
+}
+
+.viz-content-empty i,
+.viz-content-empty svg {
+  width: 36px;
+  height: 36px;
+  opacity: 0.4;
+}
+
+.viz-content-empty p {
+  font-size: 0.8125rem;
+}
+
+/* --- Canvas Pane (Right) --- */
+.viz-canvas-pane {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-surface);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  z-index: 10;
+}
+
+.viz-canvas-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+  background: linear-gradient(to bottom, var(--bg-surface-hover), var(--bg-surface));
+  z-index: 20;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.viz-canvas-toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.viz-canvas-toolbar-left i,
+.viz-canvas-toolbar-left svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-primary);
+}
+
+.viz-canvas-toolbar>div:last-child {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem !important;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.viz-zoom-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: var(--bg-surface-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.125rem;
+}
+
+.viz-zoom-btn {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-sans);
+}
+
+.viz-zoom-btn:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.viz-zoom-btn i,
+.viz-zoom-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.viz-zoom-level {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--text-tertiary);
+  min-width: 36px;
+  text-align: center;
+  user-select: none;
+}
+
+/* --- SVG Canvas --- */
+.viz-canvas-container {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  cursor: grab;
+  background-color: var(--bg-body);
+  background-image:
+    radial-gradient(circle, var(--border-color) 1px, transparent 1px);
+  background-size: 24px 24px;
+  transition: background-color 0.2s ease;
+}
+
+.viz-canvas-container.panning {
+  cursor: grabbing;
+}
+
+.viz-canvas-container.linking-mode {
+  cursor: crosshair;
+}
+
+.viz-canvas-container.drag-over {
+  background-color: rgba(34, 211, 238, 0.03);
+  box-shadow: inset 0 0 0 2px var(--color-primary-subtle);
+}
+
+.viz-canvas-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.viz-canvas-svg line,
+.viz-canvas-svg path {
+  pointer-events: stroke;
+}
+
+.viz-nodes-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* --- Node Styles --- */
+.viz-node {
+  position: absolute;
+  user-select: none;
+  cursor: pointer;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+  pointer-events: auto;
+  width: max-content;
+}
+
+.viz-node-inner {
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 0.75rem 1rem;
+  min-width: 140px;
+  max-width: 260px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+  position: relative;
+}
+
+.viz-node:hover .viz-node-inner {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-lg), 0 0 12px var(--color-primary-glow);
+  transform: translateY(-1px);
+}
+
+.viz-node.not-linked .viz-node-inner {
+  background: repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0.03),
+      rgba(255, 255, 255, 0.03) 10px,
+      transparent 10px,
+      transparent 20px), var(--bg-elevated);
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.viz-node.not-linked:hover .viz-node-inner {
+  border-style: solid;
+  opacity: 1;
+}
+
+.viz-node.selected .viz-node-inner {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow), var(--shadow-lg);
+}
+
+.viz-node[data-draft="true"] .viz-node-inner {
+  border-style: dashed;
+  border-color: var(--text-tertiary);
+  opacity: 0.75;
+  box-shadow: none;
+}
+
+.viz-node[data-draft="true"]:hover .viz-node-inner {
+  border-color: var(--color-primary);
+  opacity: 1;
+}
+
+.viz-node-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.viz-node-header i,
+.viz-node-header svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.viz-node-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* When node has custom width, allow wrapping */
+.viz-node-inner[style*="width"] .viz-node-title {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.viz-node-subtitle {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* FIX: Giant, Indestructible Root Node Styles */
+.viz-node[data-type="root"] {
+  z-index: 10;
+}
+
+.viz-node[data-type="root"] .viz-node-inner {
+  border: 3px solid var(--color-primary);
+  background: radial-gradient(circle at center, var(--color-primary-subtle) 0%, var(--bg-elevated) 100%);
+  padding: 1rem 1.5rem;
+  min-width: 160px;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.15);
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+.viz-node[data-type="root"] .viz-node-header {
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.viz-node[data-type="root"] .viz-node-header i,
+.viz-node[data-type="root"] .viz-node-header svg {
+  width: 24px;
+  height: 24px;
+  color: var(--color-primary);
+}
+
+.viz-node[data-type="root"] .viz-node-title {
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-primary);
+}
+
+/* Node type variants */
+.viz-node[data-type="folder"] .viz-node-inner {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.viz-node[data-type="folder"] .viz-node-header i,
+.viz-node[data-type="folder"] .viz-node-header svg {
+  color: var(--color-accent);
+}
+
+.viz-node[data-type="comment"] .viz-node-inner {
+  background: var(--bg-surface) !important;
+  border-color: var(--color-warning);
+  border-style: solid !important;
+  opacity: 1 !important;
+  max-width: none !important;
+  min-width: 100px !important;
+  min-height: 50px !important;
+  resize: both !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0.75rem !important;
+  transition: none !important;
+}
+
+/* Comment nodes must always look solid even if unlinked or draft */
+.viz-node[data-type="comment"].not-linked .viz-node-inner,
+.viz-node[data-type="comment"][data-draft="true"] .viz-node-inner {
+  background: var(--bg-surface) !important;
+  border-style: solid !important;
+  opacity: 1 !important;
+}
+
+.viz-comment-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 0;
+  overflow: visible;
+}
+
+.viz-comment-content {
+  flex: 1;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: visible;
+  height: auto;
+  width: 100%;
+}
+
+/* --- Comment Editor Popup --- */
+.viz-comment-editor-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.viz-comment-editor-window {
+  background: #0d1117;
+  border: 1px solid #30363d;
+  border-radius: var(--radius-lg);
+  width: 80%;
+  max-width: 800px;
+  height: 70vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.2s ease-out;
+  resize: both;
+  overflow: hidden;
+}
+
+.viz-comment-editor-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  color: #c9d1d9;
+  font-family: monospace;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.viz-comment-editor-header span {
+  flex: 1;
+  font-weight: bold;
+}
+
+.viz-comment-editor-close {
+  background: none;
+  border: none;
+  color: #8b949e;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.viz-comment-editor-close:hover {
+  color: #f85149;
+}
+
+.viz-comment-editor-body {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+}
+
+.viz-comment-editor-textarea {
+  flex: 1;
+  background: #000;
+  color: #e6edf3;
+  border: 1px solid #30363d;
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  font-family: 'Consolas', 'Courier New', monospace;
+  font-size: 1rem;
+  resize: both;
+  outline: none;
+  width: 100%;
+}
+
+.viz-comment-editor-textarea:focus {
+  border-color: #06b6d4;
+  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.3);
+}
+
+.viz-comment-editor-footer {
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid #30363d;
+  background: #161b22;
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+
+
+.viz-node.dragging {
+  z-index: 1000;
+  opacity: 0.85;
+}
+
+.viz-node.dragging .viz-node-inner {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  transform: scale(1.03);
+}
+
+/* Node color overrides */
+.viz-node[data-color="red"] .viz-node-inner {
+  border-color: #ef4444 !important;
+}
+
+.viz-node[data-color="orange"] .viz-node-inner {
+  border-color: #f97316 !important;
+}
+
+.viz-node[data-color="yellow"] .viz-node-inner {
+  border-color: #eab308 !important;
+}
+
+.viz-node[data-color="green"] .viz-node-inner {
+  border-color: #22c55e !important;
+}
+
+.viz-node[data-color="blue"] .viz-node-inner {
+  border-color: #3b82f6 !important;
+}
+
+.viz-node[data-color="purple"] .viz-node-inner {
+  border-color: #a855f7 !important;
+}
+
+.viz-node[data-color="pink"] .viz-node-inner {
+  border-color: #ec4899 !important;
+}
+
+.viz-node[data-color="cyan"] .viz-node-inner {
+  border-color: #06b6d4 !important;
+}
+
+/* --- Link/Connection Lines --- */
+.viz-link-group {
+  cursor: pointer;
+}
+
+.viz-link-hitbox {
+  stroke: transparent;
+  stroke-width: 20;
+  fill: none;
+  pointer-events: stroke;
+}
+
+.viz-link {
+  stroke: var(--text-tertiary);
+  stroke-width: 2;
+  fill: none;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.3s ease;
+  pointer-events: none;
+  /* Let the hitbox handle the pointer events */
+}
+
+.viz-link-group:hover .viz-link {
+  stroke: var(--color-primary);
+  stroke-width: 3;
+}
+
+.viz-link.locked {
+  stroke: var(--color-warning);
+  stroke-dasharray: 6 3;
+}
+
+.viz-link-lock {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 2px solid var(--color-warning);
+  color: var(--color-warning);
+  font-size: 0.625rem;
+  pointer-events: auto;
+  box-shadow: var(--shadow-sm);
+  z-index: 5;
+  animation: popIn 0.3s 0.15s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  transition: transform 0.15s ease;
+}
+
+.viz-link-lock:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
+}
+
+.viz-link-lock i,
+.viz-link-lock svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* Custom non-parent/child links */
+.viz-link.custom-link {
+  stroke: var(--color-warning);
+  stroke-dasharray: 4 4;
+}
+
+/* --- Context Menus --- */
+.viz-context-menu {
+  position: fixed;
+  z-index: 2000;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl), 0 0 20px rgba(0, 0, 0, 0.15);
+  padding: 0.375rem;
+  min-width: 200px;
+  animation: popIn 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top left;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.viz-context-menu.hidden {
+  display: none;
+}
+
+.viz-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+}
+
+.viz-ctx-item i,
+.viz-ctx-item svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  transition: transform 0.15s ease;
+}
+
+.viz-ctx-item:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  transform: translateX(2px);
+}
+
+.viz-ctx-item:hover i,
+.viz-ctx-item:hover svg {
+  transform: scale(1.1);
+}
+
+.viz-ctx-item.danger:hover {
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+}
+
+.viz-ctx-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.25rem 0.5rem;
+}
+
+/* Color picker in context menu */
+.viz-color-picker {
+  display: flex;
+  gap: 0.375rem;
+  padding: 0.375rem 0.75rem;
+  flex-wrap: wrap;
+}
+
+.viz-color-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.viz-color-swatch:hover {
+  transform: scale(1.2);
+  border-color: var(--text-primary);
+}
+
+.viz-color-swatch.active {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+
+/* --- Link Context Menu (compact) --- */
+.viz-link-menu {
+  position: fixed;
+  z-index: 2000;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  padding: 0.375rem;
+  min-width: 160px;
+  animation: scaleIn 0.12s ease-out;
+}
+
+.viz-link-menu.hidden {
+  display: none;
+}
+
+/* --- Linking Mode Overlay Text --- */
+.viz-linking-hint {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-full);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  animation: fadeInUp 0.3s ease-out;
+}
+
+.viz-linking-hint i,
+.viz-linking-hint svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* --- Canvas Empty State --- */
+.viz-canvas-empty {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  pointer-events: none;
+}
+
+.viz-canvas-empty i,
+.viz-canvas-empty svg {
+  width: 56px;
+  height: 56px;
+  opacity: 0.25;
+}
+
+.viz-canvas-empty h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.viz-canvas-empty p {
+  font-size: 0.8125rem;
+  max-width: 260px;
+}
+
+/* --- Fog of War (Locked Nodes) --- */
+.viz-node.viz-fog-of-war .viz-node-inner {
+  filter: blur(5px) grayscale(100%) brightness(0.4);
+  pointer-events: none;
+  user-select: none;
+  position: relative;
+}
+
+.viz-node.viz-fog-of-war {}
+
+.viz-node.viz-fog-of-war:hover .viz-node-inner {
+  border-color: var(--border-color);
+  box-shadow: var(--shadow-md);
+  transform: none;
+}
+
+.viz-fog-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: radial-gradient(ellipse at center, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.4) 100%);
+  border-radius: var(--radius-lg);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.viz-fog-overlay i,
+.viz-fog-overlay svg {
+  width: 14px;
+  height: 14px;
+  color: var(--color-warning);
+  opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(245, 158, 11, 0.6));
+}
+
+.viz-fog-label {
+  font-size: 0.875rem;
+  font-weight: 800;
+  color: var(--color-warning);
+  letter-spacing: 0.15em;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+/* Fog reveal animation */
+@keyframes fogReveal {
+  0% {
+    filter: blur(5px) grayscale(100%) brightness(0.4);
+    opacity: 0.5;
+  }
+
+  50% {
+    filter: blur(2px) grayscale(50%) brightness(0.7);
+    opacity: 0.8;
+  }
+
+  100% {
+    filter: none;
+    opacity: 1;
+  }
+}
+
+.viz-node.viz-fog-reveal .viz-node-inner {
+  animation: fogReveal 1.2s ease-out forwards;
+}
+
+.viz-node.viz-fog-reveal .viz-fog-overlay {
+  animation: fadeOut 0.8s ease-out forwards;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+/* --- Prerequisite Picker Modal --- */
+.prereq-picker-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.prereq-picker-window {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+  animation: scaleIn 0.25s ease-out;
+  overflow: hidden;
+}
+
+.prereq-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.prereq-picker-header h2 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+}
+
+.prereq-picker-header h2 i,
+.prereq-picker-header h2 svg {
+  color: var(--color-warning);
+  width: 20px;
+  height: 20px;
+}
+
+.prereq-picker-search {
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.prereq-picker-search input {
+  width: 100%;
+  background: var(--bg-surface-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.5rem 1rem 0.5rem 2.25rem;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+.prereq-picker-search input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow);
+}
+
+.prereq-picker-search input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.prereq-picker-search-wrapper {
+  position: relative;
+}
+
+.prereq-picker-search-wrapper i,
+.prereq-picker-search-wrapper svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 14px;
+  height: 14px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.prereq-picker-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.prereq-picker-folder {
+  margin-bottom: 0.25rem;
+}
+
+.prereq-picker-folder-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.prereq-picker-folder-header:hover {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-primary);
+}
+
+.prereq-picker-folder-header i,
+.prereq-picker-folder-header svg {
+  width: 14px;
+  height: 14px;
+}
+
+.prereq-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.75rem 0.5rem 1.75rem;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.prereq-picker-item:hover {
+  background: rgba(148, 163, 184, 0.1);
+  border-color: var(--border-color-subtle);
+}
+
+.prereq-picker-item.checked {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.prereq-picker-item-label {
+  flex: 1;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prereq-picker-item-meta {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+}
+
+.prereq-picker-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-warning);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.prereq-picker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.prereq-picker-count {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.prereq-picker-count span {
+  color: var(--color-warning);
+  font-weight: 800;
+}
+
+.prereq-picker-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-tertiary);
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.prereq-picker-empty i,
+.prereq-picker-empty svg {
+  width: 32px;
+  height: 32px;
+  opacity: 0.4;
+}
+
+/* --- Responsive --- */
+@media (max-width: 1024px) {
+  .viz-content-pane {
+    width: 260px;
+    min-width: 220px;
+  }
+
+  .viz-module-tabs {
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .viz-workspace {
+    flex-direction: column;
+  }
+
+  .viz-content-pane {
+    width: 100%;
+    max-width: 100%;
+    min-width: 100%;
+    height: 40%;
+  }
+
+  .viz-canvas-pane {
+    height: 60%;
+  }
+
+  .viz-topbar {
+    flex-wrap: wrap;
+  }
+}
+
+/* === SEARCH BAR === */
+.viz-search-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.viz-search-icon {
+  position: absolute;
+  left: 0.625rem;
+  width: 13px;
+  height: 13px;
+  color: var(--text-tertiary);
+  pointer-events: none;
+}
+
+.viz-search-input {
+  width: 100%;
+  background: var(--bg-surface-hover);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 2rem 0.4rem 2rem;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.viz-search-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-glow);
+}
+
+.viz-search-input::placeholder {
+  color: var(--text-tertiary);
+}
+
+.viz-search-clear {
+  position: absolute;
+  right: 0.375rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.15s, color 0.15s;
+}
+
+.viz-search-clear:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: var(--color-danger);
+}
+
+.viz-search-clear i,
+.viz-search-clear svg {
+  width: 12px;
+  height: 12px;
+}
+
+.viz-search-clear.hidden {
+  display: none;
+}
+
+/* === NODE BADGE (completion check) === */
+.viz-node-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+.viz-node-badge-done {
+  background: var(--color-success);
+  color: #fff;
+  box-shadow: 0 0 6px rgba(34, 197, 94, 0.5);
+  animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === SEARCH HIGHLIGHT / DIM === */
+.viz-node.viz-search-match .viz-node-inner {
+  border-color: var(--color-accent) !important;
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.25), var(--shadow-lg) !important;
+}
+
+.viz-node.viz-search-dim {
+  opacity: 0.25;
+  transition: opacity 0.2s;
+}
+
+/* === SVG PATH for bezier links (replaces line) === */
+.viz-link-hitbox {
+  stroke: transparent;
+  stroke-width: 20;
+  fill: none;
+  pointer-events: stroke;
+}
+
+/* === MINIMAP === */
+.viz-minimap {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  width: 180px;
+  height: 110px;
+  background: rgba(13, 17, 23, 0.85);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 50;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.viz-minimap:hover {
+  opacity: 0.5;
+}
+
+#viz-minimap-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.viz-minimap-viewport {
+  position: absolute;
+  border: 1.5px solid var(--color-primary);
+  background: rgba(99, 102, 241, 0.08);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* === POPUP HEADER + STATS === */
+.viz-popup-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.875rem 0.875rem 0.625rem;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.viz-popup-stats {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--border-color);
+  background: var(--bg-surface-hover);
+}
+
+.viz-popup-stat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.5rem 0.25rem;
+  border-right: 1px solid var(--border-color);
+}
+
+.viz-popup-stat:last-child {
+  border-right: none;
+}
+
+.viz-popup-stat-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  font-family: var(--font-mono);
+  line-height: 1;
+}
+
+.viz-popup-stat-label {
+  font-size: 0.6rem;
+  color: var(--text-tertiary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+  font-weight: 600;
+}
+
+/* ============================================================
+   BRAIN MODULE — Sidebar Styles
+   ============================================================ */
+
+.brain-sidebar-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  padding: 0.75rem 0.5rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+}
+
+.brain-new-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  justify-content: center;
+}
+
+.brain-new-btn:hover {
+  background: var(--color-primary);
+  color: var(--text-on-primary);
+}
+
+.brain-new-btn-secondary {
+  background: var(--bg-surface-hover);
+  border-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.brain-new-btn-secondary:hover {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* Version items */
+.brain-version-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+  position: relative;
+  overflow: hidden;
+  font-size: 0.875rem;
+}
+
+.brain-version-item:hover {
+  background: rgba(148, 163, 184, 0.12);
+  border-color: var(--border-color-subtle);
+}
+
+.brain-version-item.active {
+  background: radial-gradient(circle at left, rgba(34, 211, 238, 0.15) 0%, transparent 80%), var(--bg-surface-hover);
+}
+
+.brain-version-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 15%;
+  bottom: 15%;
+  width: 3px;
+  background: #22d3ee;
+  box-shadow: 2px 0 8px #22d3ee;
+  border-radius: 0 4px 4px 0;
+}
+
+.brain-version-name {
+  flex: 1;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.brain-active-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  flex-shrink: 0;
+  box-shadow: 0 0 6px var(--color-primary-glow);
+  animation: glowPulse 2s ease-in-out infinite;
+}
+
+/* Folder items */
+.brain-folder-item {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8125rem;
+  transition: background var(--transition-fast);
+}
+
+.brain-folder-item:hover {
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.brain-folder-name {
+  flex: 1;
+  font-weight: 600;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.brain-folder-actions {
+  display: none;
+  gap: 0.125rem;
+}
+
+.brain-folder-item:hover .brain-folder-actions {
+  display: flex;
+}
+
+.brain-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--text-tertiary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  padding: 0;
+}
+
+.brain-icon-btn:hover {
+  background: var(--bg-surface-hover);
+  color: var(--text-primary);
+}
+
+/* ============================================================
+   TOOLBAR PILL BUTTONS + DROPDOWNS
+   ============================================================ */
+
+.viz-toolbar-pill-btn {
+  width: auto;
+  padding: 0 0.7rem;
+  font-size: 0.7rem;
+  font-weight: 700;
+  gap: 0.35rem;
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--border-color);
+  height: 30px;
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+
+.viz-toolbar-pill-btn:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px var(--color-primary-glow);
+}
+
+.viz-toolbar-pill-btn.is-active {
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow), 0 2px 6px rgba(99, 102, 241, 0.25);
+}
+
+.viz-toolbar-pill-btn.is-active i {
+  color: white !important;
+}
+
+.viz-toolbar-pill-btn.is-active.viz-state-fog {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18), 0 2px 6px rgba(245, 158, 11, 0.25);
+}
+
+.viz-toolbar-pill-btn.is-active.viz-state-flow {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.18), 0 2px 6px rgba(6, 182, 212, 0.25);
+}
+
+.viz-toolbar-pill-btn.is-active.viz-state-color {
+  background: var(--color-success);
+  border-color: var(--color-success);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18), 0 2px 6px rgba(16, 185, 129, 0.25);
+}
+
+.viz-toolbar-pill-btn.is-active.viz-state-globe {
+  background: #8b5cf6;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18), 0 2px 6px rgba(139, 92, 246, 0.25);
+}
+
+.viz-toolbar-pill-btn i {
+  flex-shrink: 0;
+  transition: transform 0.18s ease;
+}
+
+.viz-toolbar-pill-btn.is-active i {
+  transform: scale(1.1);
+}
+
+.viz-pill-chevron {
+  display: flex;
+  align-items: center;
+  border-left: 1px solid var(--border-color);
+  padding-left: 0.275rem;
+  margin-left: 0.15rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.15s ease;
+}
+
+.viz-pill-chevron:hover {
+  opacity: 1;
+}
+
+.viz-toolbar-dropdown {
+  position: relative;
+}
+
+.viz-toolbar-popup {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl), 0 0 24px rgba(0, 0, 0, 0.18);
+  padding: 0.5rem;
+  min-width: 160px;
+  z-index: 600;
+  animation: popIn 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform-origin: top right;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.viz-toolbar-popup.hidden {
+  display: none;
+}
+
+.viz-link-type-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: var(--font-sans);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.viz-link-type-option:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+  transform: translateX(2px);
+}
+
+.viz-link-type-option.active {
+  color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.viz-link-type-option i,
+.viz-link-type-option svg {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   FLOWY DRAG ANIMATIONS
+   ============================================================ */
+
+/* No transition — direct DOM updates keep dragging-child in sync with parent */
+.viz-node.dragging-child {
+  transition: none !important;
+}
+
+.viz-node.dragging-child .viz-node-inner {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18) !important;
+  opacity: 0.88;
+}
+
+/* Entrance animation for newly added nodes */
+@keyframes nodeEntrance {
+  0% {
+    opacity: 0;
+    transform: scale(0.82) translateY(8px);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.04) translateY(-2px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.viz-node.viz-node-entering .viz-node-inner {
+  animation: nodeEntrance 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* ============================================================
+   IMPROVED NODE TRANSITIONS (no-flicker)
+   ============================================================ */
+
+.viz-node:hover .viz-node-inner {
+  transform: translateY(-1px);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, transform 0.15s ease;
+}
+
+.viz-node.dragging .viz-node-inner {
+  transform: scale(1.03);
+  transition: none !important;
+}
+
+/* ============================================================
+   CANVAS BACKGROUND SUBTLE ANIMATION
+   ============================================================ */
+
+@keyframes canvasGridPulse {
+
+  0%,
+  100% {
+    background-size: 24px 24px;
+  }
+
+  50% {
+    background-size: 24.5px 24.5px;
+  }
+}
+
+/* ============================================================
+   LINK HOVER IMPROVEMENTS
+   ============================================================ */
+
+.viz-link-group {
+  transition: opacity 0.2s ease;
+}
+
+.viz-link {
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.25s ease;
+}
+
+/* ============================================================
+   IMPROVED ZOOM CONTROLS
+   ============================================================ */
+
+.viz-zoom-controls {
+  transition: opacity 0.2s ease;
+}
+
+.viz-zoom-btn {
+  transition: background 0.15s ease, color 0.15s ease, transform 0.1s ease;
+}
+
+.viz-zoom-btn:hover {
+  transform: scale(1.08);
+}
+
+.viz-zoom-btn:active {
+  transform: scale(0.94);
+}
+
+/* ============================================================
+   MODULE TAB IMPROVEMENTS
+   ============================================================ */
+
+.viz-module-tab {
+  transition: background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.viz-module-tab.active {
+  animation: none;
+  box-shadow: 0 2px 10px var(--color-primary-glow);
+}
+
+/* ============================================================
+   CANVAS TOOLBAR IMPROVEMENTS
+   ============================================================ */
+
+.viz-canvas-toolbar {
+  background: linear-gradient(to bottom, var(--bg-surface), var(--bg-surface));
+  transition: box-shadow 0.2s ease;
+}
+
+/* ============================================================
+   MINIMAP IMPROVEMENTS
+   ============================================================ */
+
+.viz-minimap {
+  transition: opacity 0.25s ease, transform 0.2s ease;
+}
+
+.viz-minimap:hover {
+  opacity: 0.35;
+  transform: scale(0.97);
+}
+
+/* ============================================================
+   POPUP ANIMATION IMPROVEMENTS
+   ============================================================ */
+
+#viz-node-details-popup {
+  animation: popIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#viz-node-details-popup.hidden {
+  display: none;
+}
+
+/* ============================================================
+   SELECTED NODE GLOW PULSE
+   ============================================================ */
+
+@keyframes selectedGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--color-primary-glow), var(--shadow-lg);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px var(--color-primary-glow), var(--shadow-lg);
+  }
+}
+
+.viz-node.selected .viz-node-inner {
+  border-color: var(--color-primary);
+  animation: selectedGlow 2.4s ease-in-out infinite;
+}
+
+/* ============================================================
+   LINKING HINT IMPROVEMENTS
+   ============================================================ */
+
+.viz-linking-hint {
+  animation: fadeInUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 20px var(--color-primary-glow);
+}
+
+/* ============================================================
+   GLOBE MODE — Obsidian-style circle nodes that expand on hover
+   ============================================================ */
+
+.viz-globe-node {
+  /* Override: no width:max-content; let the circle define size */
+  width: auto !important;
+}
+
+/* Collapsed circle */
+.viz-globe-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--bg-elevated);
+  border: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.viz-globe-circle i,
+.viz-globe-circle svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-secondary);
+  transition: color 0.18s ease;
+  flex-shrink: 0;
+}
+
+/* Color variants for globe circles */
+.viz-globe-node[data-type="folder"] .viz-globe-circle {
+  border-color: rgba(6, 182, 212, 0.45);
+}
+
+.viz-globe-node[data-type="folder"] .viz-globe-circle i {
+  color: var(--color-accent);
+}
+
+.viz-globe-node[data-type="challenge"] .viz-globe-circle i {
+  color: #22c55e;
+}
+
+.viz-globe-node[data-type="snippet"] .viz-globe-circle i {
+  color: #f59e0b;
+}
+
+.viz-globe-node[data-type="notebook"] .viz-globe-circle i {
+  color: #a855f7;
+}
+
+/* Completed badge on globe */
+.viz-globe-badge {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+  pointer-events: none;
+}
+
+/* Expanded card that appears on hover */
+.viz-globe-expand {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 10px);
+  transform: translateY(-50%) scale(0.88);
+  transform-origin: left center;
+  background: var(--bg-elevated);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-lg);
+  padding: 0.6rem 0.9rem;
+  min-width: 160px;
+  max-width: 240px;
+  box-shadow: var(--shadow-xl), 0 0 16px var(--color-primary-glow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 200;
+  white-space: nowrap;
+}
+
+.viz-globe-expand .viz-node-header {
+  gap: 0.4rem;
+}
+
+.viz-globe-expand .viz-node-header i,
+.viz-globe-expand .viz-node-header svg {
+  width: 14px;
+  height: 14px;
+}
+
+.viz-globe-expand .viz-node-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.viz-globe-expand .viz-node-subtitle {
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+
+/* Show expand on hover */
+.viz-globe-node:hover .viz-globe-circle {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 4px var(--color-primary-glow), var(--shadow-lg);
+  transform: scale(1.12);
+}
+
+.viz-globe-node:hover .viz-globe-expand {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) scale(1);
+}
+
+/* Selected globe node */
+.viz-globe-node.selected .viz-globe-circle {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-glow), var(--shadow-lg);
+  animation: selectedGlobe 2.4s ease-in-out infinite;
+}
+
+@keyframes selectedGlobe {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 3px var(--color-primary-glow), var(--shadow-lg);
+  }
+
+  50% {
+    box-shadow: 0 0 0 6px var(--color-primary-glow), var(--shadow-lg);
+  }
+}
+
+/* Color overrides on globe circles */
+.viz-globe-node[data-color="red"] .viz-globe-circle {
+  border-color: #ef4444 !important;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.viz-globe-node[data-color="orange"] .viz-globe-circle {
+  border-color: #f97316 !important;
+  background: rgba(249, 115, 22, 0.08);
+}
+
+.viz-globe-node[data-color="yellow"] .viz-globe-circle {
+  border-color: #eab308 !important;
+  background: rgba(234, 179, 8, 0.08);
+}
+
+.viz-globe-node[data-color="green"] .viz-globe-circle {
+  border-color: #22c55e !important;
+  background: rgba(34, 197, 94, 0.08);
+}
+
+.viz-globe-node[data-color="blue"] .viz-globe-circle {
+  border-color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.08);
+}
+
+.viz-globe-node[data-color="purple"] .viz-globe-circle {
+  border-color: #a855f7 !important;
+  background: rgba(168, 85, 247, 0.08);
+}
+
+.viz-globe-node[data-color="pink"] .viz-globe-circle {
+  border-color: #ec4899 !important;
+  background: rgba(236, 72, 153, 0.08);
+}
+
+.viz-globe-node[data-color="cyan"] .viz-globe-circle {
+  border-color: #06b6d4 !important;
+  background: rgba(6, 182, 212, 0.08);
+}
+
+/* Globe fog variant */
+.viz-globe-node.viz-fog-of-war .viz-globe-circle {
+  filter: blur(2px) grayscale(100%) brightness(0.4);
+  pointer-events: none;
+}
+
+.viz-globe-node.viz-fog-of-war:hover .viz-globe-circle {
+  filter: blur(2px) grayscale(100%) brightness(0.4);
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+/* Link temp line stays visible with crosshair */
+.viz-canvas-container.linking-mode .viz-globe-node {
+  cursor: crosshair;
+}
+
+/* ============================================================
+   CONNECTION PORTS — 4-point hover dots for drag-linking
+   ============================================================ */
+
+.viz-port {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--bg-elevated);
+  box-shadow: 0 0 0 2px var(--color-primary-glow), 0 2px 6px rgba(0, 0, 0, 0.3);
+  cursor: crosshair;
+  z-index: 300;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+  pointer-events: auto;
+}
+
+/* Position each port */
+.viz-port[data-side="top"] {
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.5);
+}
+
+.viz-port[data-side="bottom"] {
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%) scale(0.5);
+}
+
+.viz-port[data-side="left"] {
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.5);
+}
+
+.viz-port[data-side="right"] {
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%) scale(0.5);
+}
+
+/* Show ports when hovering the node AND NOT in panning/dragging */
+.viz-node:hover .viz-port {
+  opacity: 1;
+}
+
+.viz-node:hover .viz-port[data-side="top"] {
+  transform: translateX(-50%) scale(1);
+}
+
+.viz-node:hover .viz-port[data-side="bottom"] {
+  transform: translateX(-50%) scale(1);
+}
+
+.viz-node:hover .viz-port[data-side="left"] {
+  transform: translateY(-50%) scale(1);
+}
+
+.viz-node:hover .viz-port[data-side="right"] {
+  transform: translateY(-50%) scale(1);
+}
+
+/* Hide ports while dragging a node or panning */
+.viz-node.dragging .viz-port,
+.viz-node.dragging-child .viz-port,
+.viz-canvas-container.panning .viz-port {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Port hover glow */
+.viz-port:hover {
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--color-primary), 0 0 12px var(--color-primary-glow);
+  transform: translateX(-50%) scale(1.3) !important;
+}
+
+.viz-port[data-side="left"]:hover,
+.viz-port[data-side="right"]:hover {
+  transform: translateY(-50%) scale(1.3) !important;
+}
